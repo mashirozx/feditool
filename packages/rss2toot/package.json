@@ -1,0 +1,23 @@
+{
+  "name": "@feditool/rss2toot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@feditool/shared": "workspace:^1.0.0",
+    "@types/jsdom": "^16.2.14",
+    "@types/node-cron": "^3.0.1",
+    "cheerio": "^1.0.0-rc.10",
+    "franc": "^6.0.0",
+    "iso-639-3-to-1": "^1.0.0",
+    "jsdom": "^19.0.0",
+    "node-cron": "^3.0.1",
+    "redis": "^4.1.0",
+    "rss-parser": "^3.12.0"
+  }
+}

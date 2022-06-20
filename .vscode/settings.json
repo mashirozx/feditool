@@ -1,0 +1,15 @@
+{
+  "cSpell.words": [
+    "antfu",
+    "feditool",
+    "gifv",
+    "linebreak",
+    "megalodon",
+    "misskey",
+    "pleroma"
+  ],
+  // "editor.codeActionsOnSave": {
+  //   "source.fixAll.eslint": true
+  // },
+  "editor.formatOnSave": true,
+}
