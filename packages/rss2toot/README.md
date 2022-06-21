@@ -23,6 +23,8 @@ cd packages/rss2toot
 cp config.sample.ini config.ini
 vi config.ini
 npx ts-node src/main.ts
+# you can also boot service in project root or any where else
+sh scripts/start-rss2toot.sh
 ```
 
 ### TODO
