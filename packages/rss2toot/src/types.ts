@@ -27,6 +27,12 @@ export type RedisConfig = {
   }
 }
 
+export type GeneralConfig = {
+  general: {
+    debug?: boolean
+  }
+}
+
 export type NodeConfigs = {
   [key in SourceType]: {
     [nickname: string]: SingleNodeConfig
@@ -36,7 +42,7 @@ export type NodeConfigs = {
 /**
  * Type of `config.ini` file
  */
-export type Config = NodeConfigs & RedisConfig
+export type Config = GeneralConfig & RedisConfig & NodeConfigs
 
 /**
  * Profile for `TootPoster` to login

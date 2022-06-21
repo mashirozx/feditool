@@ -25,19 +25,23 @@ async function main() {
   const redis = redisService.client
   const jobs = new Jobs(config, redis)
   await jobs.run()
+
+  // npx bug: SIGINT called twice
+  // https://github.com/npm/cli/issues/5021
   process.on('SIGINT', async () => {
+    console.log('\n')
     console.log(colors.green('Caught interrupt signal'))
     console.log(colors.green('Gracefully shutting down...'))
     console.log(colors.green('Clearing queues...'))
     await jobs.stop()
     console.log(colors.green('Closing redis connection...'))
-    await redis.quit()
+    if (redisService.status === 'ready') await redis.disconnect()
     console.log(
       colors.inverse(
         colors.green(' Bye! ') + ` run for ${Date.now() - start} ms `
       )
     )
-    process.exit()
+    process.exit(0)
   })
 }
 

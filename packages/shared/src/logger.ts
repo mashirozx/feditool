@@ -1,5 +1,6 @@
 // TODO: use randomUUID
 import { v4 as uuid } from 'uuid'
+import colors from '@colors/colors'
 
 export class Logger {
   constructor(private readonly _id: string = uuid()) {
@@ -15,7 +16,16 @@ export class Logger {
   }
 
   static error(message: string, ...optionalParams: any[]) {
-    console.error(message, ...optionalParams)
+    console.error(colors.red(message), ...optionalParams)
+    console.trace()
+  }
+
+  static warn(message: string, ...optionalParams: any[]) {
+    console.warn(colors.yellow(message), ...optionalParams)
+  }
+
+  static success(message: string, ...optionalParams: any[]) {
+    console.log(colors.green(message), ...optionalParams)
   }
 
   static debugPrint(payload: any) {
@@ -35,11 +45,15 @@ export class Logger {
   }
 
   warn(message: string) {
-    Logger.log(`[${this._id}] [WARN] ${message}`)
+    Logger.warn(`[${this._id}] [WARN] ${message}`)
   }
 
   debug(message: string) {
     Logger.log(`[${this._id}] [DEBUG] ${message}`)
+  }
+
+  success(message: string) {
+    Logger.success(`[${this._id}] [SUCCESS] ${message}`)
   }
 
   debugPrint(payload: any) {

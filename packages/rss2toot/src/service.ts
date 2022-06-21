@@ -109,10 +109,13 @@ export class Service {
     const downloader = await this.handleMediaAttachments(formattedStatusContent)
     const mediaAttachments = downloader.fileList
     this.logger.info(`Posting status: ${status.link}`)
-    const isSucceed = await this.postToot(content, mediaAttachments)
-    downloader.clearTempFiles()
+    logger.debug(`Posting status: ${content}`)
+    let succeed = true
+    await this.postToot(content, mediaAttachments)
+      .then(() => (succeed = true))
+      .catch(() => (succeed = false))
 
-    if (isSucceed) {
+    if (succeed) {
       await redis.set(redisSucceedKey, logger.id)
       await redis.del(redisFailedKey)
       await redis.del(redisRetryKey)
@@ -124,6 +127,8 @@ export class Service {
         await redis.set(redisRetryKey, 1)
       }
     }
+
+    downloader.clearTempFiles()
     await redis.del(redisProcessingKey)
   }
 
@@ -178,13 +183,11 @@ export class Service {
    */
   private async postToot(content: string, mediaAttachments: FileItem[]) {
     const { visibility, language } = this.config
-    await this.poster.buildToot(content, {
+    const toot = await this.poster.buildToot(content, {
       medias: mediaAttachments,
       visibility,
       language
     })
-    let succeed = true
-    await this.poster.post().catch(() => (succeed = false))
-    return succeed
+    return this.poster.post(toot)
   }
 }

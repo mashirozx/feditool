@@ -73,7 +73,10 @@ importers:
       rss-parser: 3.12.0
 
   packages/shared:
-    specifiers: {}
+    specifiers:
+      '@colors/colors': ^1.5.0
+    dependencies:
+      '@colors/colors': 1.5.0
 
 packages:
 

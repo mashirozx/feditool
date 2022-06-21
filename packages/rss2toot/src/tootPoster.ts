@@ -7,16 +7,16 @@ import { FileItem } from './types'
 import type { Profile, PostStatusArgs } from './types'
 import { InstanceType, Visibility, MediaType } from './enums'
 
+export interface Toot {
+  status: PostStatusArgs[0]
+  options: PostStatusArgs[1]
+}
+
 /**
  * Class to post toot
  */
 export class TootPoster {
   private client: MegalodonInterface
-
-  private toot!: {
-    status: PostStatusArgs[0]
-    options: PostStatusArgs[1]
-  }
 
   /**
    * @param profile The login info
@@ -35,8 +35,8 @@ export class TootPoster {
   /**
    * Post the toot
    */
-  public async post() {
-    const { client, toot } = this
+  public async post(toot: Toot) {
+    const { client } = this
     return client
       .postStatus(toot.status, toot.options)
       .then((res: Response<Entity.Status>) => {
@@ -95,7 +95,7 @@ export class TootPoster {
 
     delete options?.medias
 
-    this.toot = {
+    return {
       status,
       options: {
         media_ids,

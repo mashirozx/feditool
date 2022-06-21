@@ -30,7 +30,6 @@ export class Jobs {
   private sigint = false
 
   public async run() {
-    // this.addSchedule(this.config.weibo['英国报姐'])
     const types = Object.values(SourceType).map(i => String(i))
     for (const [group, configs] of Object.entries(this.config)) {
       if (types.includes(group)) {
@@ -83,10 +82,11 @@ export class Jobs {
           NX: true
         })
 
-        const service = new Service(config, logger, redis)
+        let service = new Service(config, logger, redis)
         workers.push({ id: logger.id, service })
         await service.run()
         remove(workers, { id: logger.id })
+        service = null // release memory
 
         await redis.del(redisProcessingKey)
       },

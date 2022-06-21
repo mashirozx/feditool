@@ -9,7 +9,9 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "jest",
-    "test:unit": "jest --silent=false --coverage=false"
+    "test:unit": "jest --silent=false --coverage=false",
+    "rss2toot": "pnpm --filter rss2toot",
+    "shared": "pnpm --filter shared"
   },
   "devDependencies": {
     "@types/ini": "^1.3.31",

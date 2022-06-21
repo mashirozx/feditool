@@ -1,5 +1,9 @@
 rss2toot
 ===
+
+> **Warning**  
+> Still under development, some configuration may be change in the future. Use with your own risk.
+
 ### Requirements:
 
 - Nodejs 16+
@@ -7,10 +11,28 @@ rss2toot
 
 ### How to use
 
+> **Note**  
+> Must use pnpm, yarn and npm is not supported.
+
 ```bash
+git clone https://github.com/mashirozx/feditool.git
 npm i -g pnpm
+# install in project root!
 pnpm install
+cd packages/rss2toot
 cp config.sample.ini config.ini
 vi config.ini
-node -r ts-node/register packages/rss2toot/src/main.ts
+npx ts-node src/main.ts
 ```
+
+### TODO
+- [ ] Docker
+- [ ] PM2
+- [ ] GitHub Action support
+- [ ] Vercel support
+- [ ] More cache method
+- [ ] Single job mode (trigger by system cronjob)
+- [x] Weibo
+- [ ] Bilibili
+- [ ] Twitter
+- [ ] Custom filter
