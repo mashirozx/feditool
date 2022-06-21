@@ -1,18 +1,33 @@
 import cron from 'node-cron'
 import type { RedisClientType } from 'redis'
+import { remove } from 'lodash'
 
 import type { Config, SingleNodeConfig } from './types'
 import { Service } from './service'
 import { Logger } from '@feditool/shared/src/logger'
 import { SourceType } from './enums'
-import { join } from 'path'
 
-export class Worker {
+export class Jobs {
   constructor(
     private readonly config: Config,
     private readonly redis: RedisClientType,
     private readonly logger = new Logger()
   ) {}
+
+  /**
+   * List for scheduled jobs
+   */
+  private jobs: cron.ScheduledTask[] = []
+
+  /**
+   * List for current running workers (services)
+   */
+  private workers: { id: string; service: Service }[] = []
+
+  /**
+   * Flag to indicate when the quit signal is received.
+   */
+  private sigint = false
 
   public async run() {
     // this.addSchedule(this.config.weibo['英国报姐'])
@@ -28,8 +43,17 @@ export class Worker {
     }
   }
 
+  public async stop() {
+    this.sigint = true
+    await Promise.all(this.jobs.map(job => job.stop()))
+    await Promise.all(
+      this.workers.map(async worker => await worker.service.stop())
+    )
+  }
+
   private addSchedule(config: SingleNodeConfig) {
-    const { redis } = this
+    const { redis, jobs, workers, sigint } = this
+    if (sigint) return
     const validate = cron.validate(config.cron)
     if (!validate) {
       this.logger.error(`${config.cron} is not a valid cron expression`)
@@ -60,7 +84,9 @@ export class Worker {
         })
 
         const service = new Service(config, logger, redis)
+        workers.push({ id: logger.id, service })
         await service.run()
+        remove(workers, { id: logger.id })
 
         await redis.del(redisProcessingKey)
       },
@@ -70,5 +96,7 @@ export class Worker {
     )
 
     job.start()
+
+    jobs.push(job)
   }
 }

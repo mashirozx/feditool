@@ -154,8 +154,6 @@ export class MediaDownloader {
         })
       )
     }
-
-    return fileList
   }
 }
 

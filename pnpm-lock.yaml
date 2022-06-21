@@ -44,24 +44,30 @@ importers:
 
   packages/rss2toot:
     specifiers:
+      '@colors/colors': ^1.5.0
       '@feditool/shared': workspace:^1.0.0
       '@types/jsdom': ^16.2.14
+      '@types/lodash': ^4.14.182
       '@types/node-cron': ^3.0.1
       cheerio: ^1.0.0-rc.10
       franc: ^6.0.0
       iso-639-3-to-1: ^1.0.0
       jsdom: ^19.0.0
+      lodash: ^4.17.21
       node-cron: ^3.0.1
       redis: ^4.1.0
       rss-parser: ^3.12.0
     dependencies:
+      '@colors/colors': 1.5.0
       '@feditool/shared': link:../shared
       '@types/jsdom': 16.2.14
+      '@types/lodash': 4.14.182
       '@types/node-cron': 3.0.1
       cheerio: 1.0.0-rc.11
       franc: 6.0.0
       iso-639-3-to-1: 1.0.0
       jsdom: 19.0.0
+      lodash: 4.17.21
       node-cron: 3.0.1
       redis: 4.1.0
       rss-parser: 3.12.0
@@ -393,6 +399,11 @@ packages:
   /@bcoe/v8-coverage/0.2.3:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
     dev: true
+
+  /@colors/colors/1.5.0:
+    resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
+    engines: {node: '>=0.1.90'}
+    dev: false
 
   /@cspotcode/source-map-support/0.8.1:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -866,6 +877,10 @@ packages:
   /@types/json-schema/7.0.11:
     resolution: {integrity: sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==}
     dev: true
+
+  /@types/lodash/4.14.182:
+    resolution: {integrity: sha512-/THyiqyQAP9AfARo4pF+aCGcyiQ94tX/Is2I7HofNRqoYLgN1PBoOWu2/zTA5zMxzP5EFutMtWtGAFRKUe961Q==}
+    dev: false
 
   /@types/mime-types/2.1.1:
     resolution: {integrity: sha512-vXOTGVSLR2jMw440moWTC7H19iUyLtP3Z1YTj7cSsubOICinjMxFeb/V57v9QdyyPGbbWolUFSSmSiRSn94tFw==}
@@ -2893,7 +2908,6 @@ packages:
 
   /lodash/4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
-    dev: true
 
   /lru-cache/6.0.0:
     resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
