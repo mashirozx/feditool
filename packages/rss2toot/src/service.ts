@@ -45,7 +45,9 @@ export class Service {
 
   public async run() {
     const { handler, logger } = this
-    await handler.request()
+    let shouldStop = false
+    await handler.request().catch(() => (shouldStop = true))
+    if (shouldStop) return
     const statuses = handler.data.items
     for (const status of statuses) {
       this.handleStatus(status)
