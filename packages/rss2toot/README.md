@@ -2,7 +2,7 @@ rss2toot
 ===
 
 > **Warning**  
-> Still under development, some configuration may be change in the future. Use with your own risk.
+> Still under heavy development, some configuration may be changed in the future. Use it with your own risk.
 
 ### Requirements:
 
@@ -12,7 +12,7 @@ rss2toot
 ### How to use
 
 > **Note**  
-> Must use pnpm, yarn and npm is not supported.
+> Must use `pnpm`. `yarn` and `npm` is not allowed.
 
 ```bash
 git clone https://github.com/mashirozx/feditool.git
