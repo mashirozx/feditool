@@ -2,7 +2,7 @@ import fs from 'fs'
 import ini from 'ini'
 import colors from '@colors/colors'
 
-import { RedisService } from './redisService'
+import { RedisService, RedisStatus } from './redisService'
 
 import type { Config } from './types'
 import { Jobs } from './jobs'
@@ -35,7 +35,7 @@ async function main() {
     console.log(colors.green('Clearing queues...'))
     await jobs.stop()
     console.log(colors.green('Closing redis connection...'))
-    if (redisService.status === 'ready') await redis.disconnect()
+    if (redisService.status === RedisStatus.ready) await redis.disconnect()
     console.log(
       colors.inverse(
         colors.green(' Bye! ') + ` run for ${Date.now() - start} ms `

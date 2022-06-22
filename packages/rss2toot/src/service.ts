@@ -47,7 +47,10 @@ export class Service {
     const { handler, logger } = this
     let shouldStop = false
     await handler.request().catch(() => (shouldStop = true))
-    if (shouldStop) return
+    if (shouldStop) {
+      this.done = true
+      return
+    }
     const statuses = handler.data.items
     for (const status of statuses) {
       this.handleStatus(status)
@@ -69,9 +72,9 @@ export class Service {
   }
 
   private async handleStatus(status: RssItem) {
-    const { logger, redis, sigint } = this
+    if (this.sigint) return
 
-    if (sigint) return
+    const { logger, redis } = this
 
     const redisProcessingKey = `rss2toot:status:processing:${status.link}`
     const redisSucceedKey = `rss2toot:status:succeed:${status.link}`
@@ -112,25 +115,29 @@ export class Service {
     const mediaAttachments = downloader.fileList
     this.logger.info(`Posting status: ${status.link}`)
     logger.debug(`Posting status: ${content}`)
-    let succeed = true
-    await this.postToot(content, mediaAttachments)
-      .then(() => (succeed = true))
-      .catch(() => (succeed = false))
 
-    if (succeed) {
-      await redis.set(redisSucceedKey, logger.id)
-      await redis.del(redisFailedKey)
-      await redis.del(redisRetryKey)
-    } else {
-      await redis.set(redisFailedKey, logger.id)
-      if (await redis.get(redisRetryKey)) {
-        await redis.incr(redisRetryKey)
+    if (!this.sigint) {
+      /**
+       * Is postToot success?
+       */
+      let succeed = true
+      await this.postToot(content, mediaAttachments)
+        .then(() => (succeed = true))
+        .catch(() => (succeed = false))
+      if (succeed) {
+        await redis.set(redisSucceedKey, logger.id)
+        await redis.del(redisFailedKey)
+        await redis.del(redisRetryKey)
       } else {
-        await redis.set(redisRetryKey, 1)
+        await redis.set(redisFailedKey, logger.id)
+        if (await redis.get(redisRetryKey)) {
+          await redis.incr(redisRetryKey)
+        } else {
+          await redis.set(redisRetryKey, 1)
+        }
       }
+      downloader.clearTempFiles()
     }
-
-    downloader.clearTempFiles()
     await redis.del(redisProcessingKey)
   }
 
