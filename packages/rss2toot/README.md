@@ -4,11 +4,6 @@ rss2toot
 > **Warning**  
 > Still under heavy development, some configuration may be changed in the future. Use it with your own risk.
 
-### Requirements:
-
-- Nodejs 16+
-- Redis 6+
-
 ### How to use
 
 #### Docker Compose
@@ -29,8 +24,14 @@ docker compose up -d
 
 #### Manual
 
+Requirements:
+
+- Nodejs 16+
+- Redis 6+
+
 > **Note**  
-> Must use `pnpm`, while `yarn` and `npm` is not allowed. And you should prepare your Redis server first.
+> Must use `pnpm`, while `yarn` and `npm` is not allowed.
+
 
 ```bash
 git clone https://github.com/mashirozx/feditool.git
