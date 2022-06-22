@@ -1,0 +1,24 @@
+version: '3.9'
+
+services:
+
+  redis:
+    restart: always
+    image: redis:7-alpine
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+    volumes:
+      - ./redis:/data
+
+  rss2toot:
+    build: .
+    image: mashirozx/feditool:latest
+    restart: always
+    command: sh scripts/start-rss2toot.sh
+    healthcheck:
+      test: ['CMD-SHELL', 'npx ts-node --version || exit 1']
+    depends_on:
+      - redis
+    volumes:
+      - ./configs/rss2toot.ini:/app/packages/rss2toot/config.ini:ro
+

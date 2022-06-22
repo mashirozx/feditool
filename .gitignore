@@ -5,3 +5,5 @@ dist
 coverage
 tmp
 config.ini
+redis
+/configs
