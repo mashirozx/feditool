@@ -114,7 +114,7 @@ export class Service {
     const downloader = await this.handleMediaAttachments(formattedStatusContent)
     const mediaAttachments = downloader.fileList
     this.logger.info(`Posting status: ${status.link}`)
-    logger.debug(`Posting status: ${content}`)
+    // logger.debug(`Posting status: ${content}`)
 
     if (!this.sigint) {
       /**
