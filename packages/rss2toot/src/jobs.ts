@@ -69,25 +69,39 @@ export class Jobs {
           `Switch to new task logger: ${logger.id}, which belongs to worker: ${this.logger.id}`
         )
         logger.info(`Start to run ${config.cron} ${config.rssUrl}`)
+
         const redisProcessingKey = `rss2toot:feed:processing:${config.rssUrl}`
+        const redisRunTurnKey = `rss2toot:feed:run_turn:${config.rssUrl}`
         const expiresIn = 60 * 60 * 24
 
+        // Skip if is processing
         if (await redis.get(redisProcessingKey)) {
           logger.info(`Feed is processing, skip: ${config.rssUrl}`)
           return
         }
 
+        // Set processing key
         await redis.set(redisProcessingKey, logger.id, {
           EX: expiresIn,
           NX: true
         })
 
-        let service = new Service(config, logger, redis)
+        // Check run turn
+        const runTurn = Number(await redis.get(redisRunTurnKey))
+        if (!(await redis.get(redisRunTurnKey))) {
+          await redis.set(redisRunTurnKey, 1)
+        }
+        const isFirstRun = Number(await redis.get(redisRunTurnKey)) === 1
+        const shouldDryRunFirst =
+          isFirstRun && (this.config.general.dryRunFirst ?? false)
+
+        let service = new Service(config, logger, redis, shouldDryRunFirst)
         workers.push({ id: logger.id, service })
         await service.run()
         remove(workers, { id: logger.id })
         service = null // release memory
 
+        await redis.incr(redisRunTurnKey)
         await redis.del(redisProcessingKey)
       },
       {

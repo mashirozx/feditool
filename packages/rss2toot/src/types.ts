@@ -30,6 +30,7 @@ export type RedisConfig = {
 export type GeneralConfig = {
   general: {
     debug?: boolean
+    dryRunFirst?: boolean
   }
 }
 

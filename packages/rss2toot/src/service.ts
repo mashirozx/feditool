@@ -30,7 +30,8 @@ export class Service {
   constructor(
     private readonly config: SingleNodeConfig,
     private readonly logger: Logger,
-    private readonly redis: RedisClientType
+    private readonly redis: RedisClientType,
+    private readonly shouldDryRun = false
   ) {
     this.handler = new RssHandler(config.rssUrl, logger)
     this.poster = new TootPoster(
@@ -52,9 +53,9 @@ export class Service {
       return
     }
     const statuses = handler.data.items
-    for (const status of statuses) {
-      this.handleStatus(status)
-    }
+    await Promise.all(
+      statuses.map(async status => await this.handleStatus(status))
+    )
     this.done = true
     logger.info(`Service done.`)
   }
@@ -78,13 +79,26 @@ export class Service {
 
     const redisProcessingKey = `rss2toot:status:processing:${status.link}`
     const redisSucceedKey = `rss2toot:status:succeed:${status.link}`
+    const redisDryRunFirstSkipKey = `rss2toot:status:dry_run_first_skip:${status.link}`
     const redisFailedKey = `rss2toot:status:failed:${status.link}`
     const redisRetryKey = `rss2toot:status:retry:${status.link}`
     const expiresIn = 60 * 60 * 24
 
+    if (this.shouldDryRun) {
+      await redis.set(redisDryRunFirstSkipKey, logger.id)
+    }
+
     // Skip if is processing
     if (await redis.get(redisProcessingKey)) {
       logger.info(`Status is processing, skip: ${status.link}`)
+      return
+    }
+
+    // Skip if dry run first skipped
+    if (await redis.get(redisDryRunFirstSkipKey)) {
+      logger.info(
+        `Status should be skipped in dry run first mode, skip: ${status.link}`
+      )
       return
     }
 
