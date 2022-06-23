@@ -85,8 +85,8 @@ export abstract class Formatter {
   protected applyFilters(): void {
     this.imageFilter()
     this.videoFilter()
-    if (this.options.remoteMedia) this.useRemoteMedia()
     if (this.options.showSourceLink) this.appendSourceLink()
+    if (this.options.remoteMedia) this.useRemoteMedia()
     this._applied = true
   }
 
@@ -101,16 +101,16 @@ export abstract class Formatter {
   protected abstract videoFilter(): void
 
   protected useRemoteMedia() {
-    let suffix = ''
+    let suffix = '\n'
 
     for (const video of this.videos) {
-      const thumbnail = video.thumbnail ? `(${video.thumbnail})` : ''
+      const thumbnail = video.thumbnail ? `{${video.thumbnail}}` : ''
       suffix += `\nVIDEO: [${video.src}]${thumbnail}`
     }
     this.videos = []
 
     for (const image of this.images) {
-      const thumbnail = image.thumbnail ? `(${image.thumbnail})` : ''
+      const thumbnail = image.thumbnail ? `{${image.thumbnail}}` : ''
       suffix += `\nIMAGE: [${image.src}]${thumbnail}`
     }
     this.images = []
