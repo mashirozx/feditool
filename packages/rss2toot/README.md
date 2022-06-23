@@ -56,3 +56,10 @@ sh scripts/start-rss2toot.sh
 - [ ] Bilibili
 - [ ] Twitter
 - [ ] Custom filter
+- [ ] Custom formatter
+- [ ] Shared node configuration
+- [ ] Detecting duplicated token and RSS URL
+- [ ] Process max timeout
+- [ ] Optional process lock
+- [ ] Error handling in RSS handler
+- [ ] Unlock max toot chars in megalodon
