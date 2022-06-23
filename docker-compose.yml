@@ -17,6 +17,7 @@ services:
     image: mashirozx/feditool:latest
     restart: always
     command: sh scripts/start-rss2toot.sh
+    tty: true
     healthcheck:
       test: ['CMD-SHELL', 'npx ts-node --version || exit 1']
     depends_on:
