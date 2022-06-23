@@ -54,7 +54,7 @@ export class Service {
     }
     const statuses = handler.data.items
     await Promise.all(
-      statuses.map(async status => await this.handleStatus(status))
+      statuses.reverse().map(async status => await this.handleStatus(status))
     )
     this.done = true
     logger.info(`Service done.`)
