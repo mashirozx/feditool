@@ -1,8 +1,14 @@
 rss2toot
 ===
 
+A framework that syncing RSS feeds with fediverse, currently support Mastodon, Misskey and Pleroma.
+
 > **Warning**  
 > Still under heavy development, some configuration may be changed in the future. Use it with your own risk.
+
+### Demo
+
+Weibo2toot: <https://littlefo.rest/@ZhouGuanyu24>
 
 ### How to use
 
