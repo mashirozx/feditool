@@ -16,6 +16,18 @@ export class WeiboFormatter extends Formatter {
       }
       img.remove()
     })
+
+    // Animated images
+    document.querySelectorAll('video').forEach(video => {
+      const thumbnail = video.getAttribute('poster') ?? undefined
+      if (video.getAttribute('src')) {
+        images.push({
+          src: video.getAttribute('src'),
+          thumbnail: video.getAttribute('poster') ?? undefined
+        })
+        video.remove()
+      }
+    })
   }
 
   protected videoFilter(): void {
@@ -26,11 +38,9 @@ export class WeiboFormatter extends Formatter {
       const sources = Array.from(video.querySelectorAll('source')).map(
         source => source.src
       )
+
       video.remove()
-      videos.push({
-        thumbnail,
-        src: sources[0]
-      })
+      videos.push({ thumbnail, src: sources[0] })
     })
   }
 
