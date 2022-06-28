@@ -69,3 +69,5 @@ sh scripts/start-rss2toot.sh
 - [ ] Optional process lock
 - [ ] Error handling in RSS handler
 - [ ] Unlock max toot chars in megalodon
+- [ ] Handle unsupported remote media
+- [ ] Cache remote media with GitHub

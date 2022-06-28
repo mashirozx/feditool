@@ -57,6 +57,13 @@ export abstract class Formatter {
   }
 
   /**
+   * Apply formatters
+   */
+  public do() {
+    if (!this._applied) this.applyFilters()
+  }
+
+  /**
    * Get the plain result
    */
   public get content(): string {

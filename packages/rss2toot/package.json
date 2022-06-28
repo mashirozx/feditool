@@ -17,6 +17,7 @@
   "dependencies": {
     "@colors/colors": "^1.5.0",
     "@feditool/shared": "workspace:^1.0.0",
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@types/jsdom": "^16.2.14",
     "@types/lodash": "^4.14.182",
     "@types/node-cron": "^3.0.1",

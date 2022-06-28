@@ -54,7 +54,7 @@ export class Service {
     }
     const statuses = handler.data.items
     await Promise.all(
-      statuses.reverse().map(async status => await this.handleStatus(status))
+      statuses.map(async status => await this.handleStatus(status))
     )
     this.done = true
     logger.info(`Service done.`)
@@ -124,18 +124,15 @@ export class Service {
     })
 
     const formattedStatusContent = this.applyFormatter(status)
-    const content = formattedStatusContent.content
-    const downloader = await this.handleMediaAttachments(formattedStatusContent)
-    const mediaAttachments = downloader.fileList
+
     this.logger.info(`Posting status: ${status.link}`)
-    // logger.debug(`Posting status: ${content}`)
 
     if (!this.sigint) {
       /**
        * Is postToot success?
        */
       let succeed = true
-      await this.postToot(content, mediaAttachments)
+      await this.postToot(formattedStatusContent)
         .then(() => (succeed = true))
         .catch(() => (succeed = false))
       if (succeed) {
@@ -150,7 +147,6 @@ export class Service {
           await redis.set(redisRetryKey, 1)
         }
       }
-      downloader.clearTempFiles()
     }
     await redis.del(redisProcessingKey)
   }
@@ -204,13 +200,19 @@ export class Service {
   /**
    * Post status
    */
-  private async postToot(content: string, mediaAttachments: FileItem[]) {
+  private async postToot(formattedStatusContent: Formatter) {
+    const content = formattedStatusContent.content
+
+    const downloader = await this.handleMediaAttachments(formattedStatusContent)
+    const mediaAttachments = downloader.fileList
+
     const { visibility, language } = this.config
     const toot = await this.poster.buildToot(content, {
       medias: mediaAttachments,
       visibility,
       language
     })
+    downloader.clearTempFiles()
     return this.poster.post(toot)
   }
 }
