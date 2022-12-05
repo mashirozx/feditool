@@ -1,0 +1,56 @@
+name: Weibo
+
+env:
+  WEIBO_USER: 5336841337
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16]
+        redis-version: [7]
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@main
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install gnpm and other dependencies
+      run: |
+        npm i -g pnpm
+        pnpm install
+    
+    # the default database file is /data/dump.rdb
+    - name: Start Redis
+      uses: supercharge/redis-github-action@1.4.0
+      with:
+        redis-version: ${{ matrix.redis-version }}
+    
+    - name: Set the configure files
+      run: |
+        cp packages/rss2toot/config.sample.ini packages/rss2toot/config.ini
+    
+    - name: Start the work
+      run: |
+        sh scripts/start-rss2toot.sh
+
+    - name: Commit & Push
+      uses: action-x/commit@v2.9
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        push-branch: 'output'
+        force-push: 'true'
+        commit-message: 'Backup database'
+        name: github-actions[bot]
+        email: github-actions[bot]@noreply.github.com

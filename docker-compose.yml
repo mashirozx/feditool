@@ -6,7 +6,7 @@ services:
     restart: always
     image: redis:7-alpine
     healthcheck:
-      test: ['CMD', 'redis-cli', 'ping']
+      test: [ 'CMD', 'redis-cli', 'ping' ]
     ports:
       - 6379:6379
     volumes:
@@ -19,9 +19,8 @@ services:
     command: sh scripts/start-rss2toot.sh
     tty: true
     healthcheck:
-      test: ['CMD-SHELL', 'npx ts-node --version || exit 1']
+      test: [ 'CMD-SHELL', 'npx ts-node --version || exit 1' ]
     depends_on:
       - redis
     volumes:
       - ./configs/rss2toot.ini:/app/packages/rss2toot/config.ini:ro
-
