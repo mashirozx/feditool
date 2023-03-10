@@ -23,7 +23,7 @@ export class WeiboFormatter extends Formatter {
       if (video.getAttribute('src')) {
         images.push({
           src: video.getAttribute('src'),
-          thumbnail: video.getAttribute('poster') ?? undefined
+          thumbnail
         })
         video.remove()
       }

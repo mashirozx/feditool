@@ -8,6 +8,7 @@ import { RssHandler } from './rssHandler'
 import type { Formatter } from './formatters/formatter'
 import { WeiboFormatter } from './formatters/weiboFormatter'
 import { SourceType } from './enums'
+import { BiliDynamicFormatter } from './formatters/biliDynamicFormatter'
 
 export const MAX_RETRY_TIME = 3
 export class Service {
@@ -177,6 +178,14 @@ export class Service {
     switch (config.sourceType) {
       case SourceType.Weibo:
         formatter = new WeiboFormatter(status.content, options, logger, payload)
+        break
+      case SourceType.BiliDynamic:
+        formatter = new BiliDynamicFormatter(
+          status.content,
+          options,
+          logger,
+          payload
+        )
         break
       default:
         logger.error(`No filter found for source type: ${config.sourceType}`)

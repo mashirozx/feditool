@@ -1,5 +1,6 @@
 export enum SourceType {
-  Weibo = 'weibo'
+  Weibo = 'weibo',
+  BiliDynamic = 'biliDynamic'
 }
 
 export enum InstanceType {
